@@ -6,9 +6,9 @@ export const useExperimentDetailsModal = (experiments) => {
     useState(false);
 
   const handleShowExperimentDetailsModal = (experimentId) => {
-    const experimentDetailsModalSelected = experiments.find(
-      (exp) => exp.id === experimentId
-    );
+    const experimentDetailsModalSelected = {
+      ...experiments.find((exp) => exp.id === experimentId),
+    };
 
     setExperimentDetailsModal(experimentDetailsModalSelected);
     setShowExperimentDetailsModal(true);

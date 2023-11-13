@@ -1,7 +1,6 @@
-import { Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 
 import { useForm } from "react-hook-form";
-import style from "./RegisterExperimentVariables.module.css";
 import { toast } from "react-hot-toast";
 import { useExperimentVariables } from "../lib/hooks/useExperimentVariables";
 import { getExperimentalVariables } from "../lib/utilis/experiments";
@@ -10,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { postExperiment } from "../lib/actions/experimentActions";
 import { useNavigate } from "react-router-dom";
 import { REGISTER_EXPERIMENT_RESET } from "../constants/experimentConstants";
+import RegisterExperimentSteps from "../components/general/RegisterExperimentSteps";
 
 const RegisterExperimentVariables = () => {
   // Function to dispatch actions
@@ -17,17 +17,21 @@ const RegisterExperimentVariables = () => {
   const navigate = useNavigate();
 
   // Get register experiment from the Redux store
-  const registerExperiment = useSelector((state) => state.registerExperiment);
+  const experimentRegister = useSelector((state) => state.experimentRegister);
 
-  const { loading, success, error } = registerExperiment;
-
-  console.log(loading, success, error);
+  const { loading, success, error } = experimentRegister;
 
   // useForm to manage form validation
   const { register, handleSubmit, reset } = useForm();
 
-  const { variableNames, variableValues, handleFileChange } =
+  const { variableNames, variableValues, handleFileChange, renameVariable } =
     useExperimentVariables();
+
+  const handleNameChange = (oldVarName, event) => {
+    const newVarName = event.target.value;
+    // Call the renameVariable function from your hook
+    renameVariable(oldVarName, newVarName);
+  };
 
   useEffect(() => {
     let toastId;
@@ -81,18 +85,18 @@ const RegisterExperimentVariables = () => {
       variables,
     };
 
-    console.log("Experiment", experiment);
-
+    console.log(experiment);
     dispatch(postExperiment(experiment));
   };
 
   return (
-    <Container fluid className={style.wrapper}>
-      <h1 className={style.title}>Register Experiment Variables</h1>
-      <Form onSubmit={handleSubmit(onSubmit)} className={style.form}>
-        <Row className={style.row}>
-          <Col md={3}>
-            <Form.Group className={style.formGroup} controlId="data">
+    <Container>
+      <RegisterExperimentSteps step1 step2 />
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Row className="d-flex justify-content-center">
+          <Col sm={6}>
+            <h1>Register Experiment Variables</h1>
+            <Form.Group controlId="data">
               <Form.Label>Enter experimental data</Form.Label>
               <Form.Control
                 {...register("data")}
@@ -102,34 +106,31 @@ const RegisterExperimentVariables = () => {
               ></Form.Control>
             </Form.Group>
 
-            {/* <Form.Group className={style.formGroup} controlId="observations">
-              <Form.Label>Observations (Optional)</Form.Label>
-              <Form.Control
-                {...register("observations")}
-                type="text"
-                placeholder="Enter observations"
-              ></Form.Control>
-            </Form.Group> */}
-
-            <button className={style.btnPrimary} type="submit">
-              Go to operation conditions section &rarr;
-            </button>
+            <Button type="submit" className="mt-3">
+              Register Experimental Data
+            </Button>
           </Col>
-          <Col md={9} className={style.cardContainer}>
-            {variableNames.map((varName, index) => (
-              <Card key={index}>
+        </Row>
+
+        <Row className="d-flex flex-wrap justify-content-center gap-3 my-5">
+          {variableNames.map((varName, index) => (
+            <Col key={index} md={4} lg={3} xl={2}>
+              {" "}
+              {/* Set the size of each card column */}
+              <Card>
                 <Card.Body>
-                  <Form.Group className={style.formGroup} controlId="name">
+                  <Form.Group controlId="name">
                     <Form.Label>Variable name:</Form.Label>
                     <Form.Control
                       {...register(varName + "-variable_name")}
                       type="text"
                       defaultValue={varName}
                       placeholder="Enter variable name"
+                      onChange={(e) => handleNameChange(varName, e)}
                     ></Form.Control>
                   </Form.Group>
 
-                  <Form.Group className={style.formGroup} controlId="units">
+                  <Form.Group controlId="units">
                     <Form.Label>Variable units:</Form.Label>
                     <Form.Control
                       {...register(varName + "-variable_units")}
@@ -143,10 +144,7 @@ const RegisterExperimentVariables = () => {
                     </Form.Control>
                   </Form.Group>
 
-                  <Form.Group
-                    className={style.formGroup}
-                    controlId="detection_method"
-                  >
+                  <Form.Group controlId="detection_method">
                     <Form.Label>Detection method (Optional):</Form.Label>
                     <Form.Control
                       {...register(varName + "-detection_method")}
@@ -156,8 +154,8 @@ const RegisterExperimentVariables = () => {
                   </Form.Group>
                 </Card.Body>
               </Card>
-            ))}
-          </Col>
+            </Col>
+          ))}
         </Row>
       </Form>
     </Container>

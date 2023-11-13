@@ -1,7 +1,20 @@
 import {
+  EXPERIMENT_DELETE_FAIL,
+  EXPERIMENT_DELETE_REQUEST,
+  EXPERIMENT_DELETE_RESET,
+  EXPERIMENT_DELETE_SUCCESS,
+  EXPERIMENT_DETAILS_FAIL,
+  EXPERIMENT_DETAILS_REQUEST,
+  EXPERIMENT_DETAILS_RESET,
+  EXPERIMENT_DETAILS_SUCCESS,
   EXPERIMENT_LIST_FAIL,
   EXPERIMENT_LIST_REQUEST,
+  EXPERIMENT_LIST_RESET,
   EXPERIMENT_LIST_SUCCESS,
+  EXPERIMENT_UPDATE_FAIL,
+  EXPERIMENT_UPDATE_REQUEST,
+  EXPERIMENT_UPDATE_RESET,
+  EXPERIMENT_UPDATE_SUCCESS,
   REGISTER_EXPERIMENT_FAIL,
   REGISTER_EXPERIMENT_REQUEST,
   REGISTER_EXPERIMENT_RESET,
@@ -30,8 +43,37 @@ export const experimentListReducer = (
     case EXPERIMENT_LIST_FAIL:
       return { loading: false, error: payload };
 
-    case REGISTER_EXPERIMENT_RESET:
+    case EXPERIMENT_LIST_RESET:
       return experimentsInitialState;
+
+    default:
+      return state;
+  }
+};
+
+const experimentinitialState = {
+  loading: false,
+  experiment: null,
+  error: null,
+};
+export const experimentDetailsReducer = (
+  state = experimentinitialState,
+  action
+) => {
+  const { payload, type } = action;
+
+  switch (type) {
+    case EXPERIMENT_DETAILS_REQUEST:
+      return { loading: true };
+
+    case EXPERIMENT_DETAILS_SUCCESS:
+      return { loading: false, experiment: payload };
+
+    case EXPERIMENT_DETAILS_FAIL:
+      return { loading: false, error: payload };
+
+    case EXPERIMENT_DETAILS_RESET:
+      return experimentinitialState;
 
     default:
       return state;
@@ -45,7 +87,7 @@ const registerInitialState = {
   error: null,
 };
 
-export const registerExperimentReducer = (
+export const experimentRegisterReducer = (
   state = registerInitialState,
   action
 ) => {
@@ -68,6 +110,66 @@ export const registerExperimentReducer = (
       return registerInitialState;
 
     //   Default case return the current state
+    default:
+      return state;
+  }
+};
+
+const experimentDeleteInitialState = {
+  loading: false,
+  success: false,
+  error: null,
+};
+
+export const experimentDeleteReducer = (
+  state = experimentDeleteInitialState,
+  action
+) => {
+  const { payload, type } = action;
+
+  switch (type) {
+    case EXPERIMENT_DELETE_REQUEST:
+      return { loading: true };
+
+    case EXPERIMENT_DELETE_SUCCESS:
+      return { loading: false, success: true };
+
+    case EXPERIMENT_DELETE_FAIL:
+      return { loading: false, error: payload };
+
+    case EXPERIMENT_DELETE_RESET:
+      return experimentDeleteInitialState;
+
+    default:
+      return state;
+  }
+};
+
+const experimentUpdateInitialState = {
+  loading: false,
+  success: false,
+  error: null,
+};
+
+export const experimentUpdateReducer = (
+  state = experimentUpdateInitialState,
+  action
+) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    case EXPERIMENT_UPDATE_REQUEST:
+      return { loading: true };
+
+    case EXPERIMENT_UPDATE_SUCCESS:
+      return { loading: false, success: true };
+
+    case EXPERIMENT_UPDATE_FAIL:
+      return { loading: false, error: payload };
+
+    case EXPERIMENT_UPDATE_RESET:
+      return experimentUpdateInitialState;
+
     default:
       return state;
   }

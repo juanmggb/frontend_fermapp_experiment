@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { getCurrentFormattedDate } from "../utilis/general";
 
 export const useUserListFilter = () => {
   const [filters, setFilters] = useState({
-    filterBy: 0,
+    filterBy: "name",
     search: "",
-    sortBy: 0,
+    sortBy: "",
+    initialDate: "",
+    finalDate: getCurrentFormattedDate(),
   });
 
   const setFilterBy = (newFilterBy) =>
@@ -16,10 +19,18 @@ export const useUserListFilter = () => {
   const setSortBy = (newSortBy) =>
     setFilters((prevFilters) => ({ ...prevFilters, sortBy: newSortBy }));
 
+  const setDate = (e) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   return {
     ...filters,
     setFilterBy,
     setSearch,
     setSortBy,
+    setDate,
   };
 };

@@ -1,8 +1,6 @@
-import { useEffect } from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
-import { useForm } from "react-hook-form";
-import style from "./RegisterExperimentDetails.module.css";
-import { toast } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
+
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,6 +8,10 @@ import {
   fetchProductList,
   fetchSubstrateList,
 } from "../lib/actions/elementActions";
+import { fetchMemberList } from "../lib/actions/userActions";
+import { fetchLaboratoryList } from "../lib/actions/laboratoryActions";
+import RegisterExperimentSteps from "../components/general/RegisterExperimentSteps";
+import { getDisplayNameById } from "../lib/utilis/general";
 
 const RegisterExperimentDetails = () => {
   // Function to dispatch actions
@@ -26,167 +28,219 @@ const RegisterExperimentDetails = () => {
   const productList = useSelector((state) => state.productList);
   const { products } = productList;
 
-  // Get products from the redux store
+  // Get substrates from the redux store
   const substrateList = useSelector((state) => state.substrateList);
   const { substrates } = substrateList;
 
+  const memberList = useSelector((state) => state.memberList);
+  const { members } = memberList;
+
+  const laboratoryList = useSelector((state) => state.laboratoryList);
+  const { laboratories } = laboratoryList;
+
+  const [experimentInfo, setExperimentInfo] = useState({
+    authorId: "",
+    supervisorId: "",
+    laboratoryId: "",
+    microorganismId: "",
+    productId: "",
+    experimentType: "",
+    observations: "",
+  });
+
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+    authorId,
+    laboratoryId,
+    substrateId,
+    microorganismId,
+    productId,
+    experimentType,
+    observations,
+  } = experimentInfo;
 
-  // useEffect para mostrar las alertas de validacion del formulario
-  useEffect(() => {
-    if (errors.laboratory) {
-      toast.dismiss();
-      toast.error(errors.laboratory.message);
-    }
-
-    if (errors.supervisor) {
-      toast.dismiss();
-      toast.error(errors.supervisor.message);
-    }
-
-    if (errors.author) {
-      toast.dismiss();
-      toast.error(errors.author.message);
-    }
-  }, [errors.author, errors.supervisor, errors.laboratory]);
+  const handleChangeExperimentField = (e) => {
+    setExperimentInfo((prevExpInfo) => ({
+      ...prevExpInfo,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   useEffect(() => {
     dispatch(fetchMicroorganismList());
     dispatch(fetchSubstrateList());
     dispatch(fetchProductList());
+    dispatch(fetchMemberList());
+    dispatch(fetchLaboratoryList());
   }, [dispatch]);
 
-  const onSubmit = (data) => {
-    // Do something with the selected file
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    const experiment = {
-      author: data.author,
-      supervisor: data.supervisor,
-      laboratory: data.laboratory,
-      substrate: data.substrate,
-      microorganism: data.microorganism,
-      product: data.product,
-      experiment_type: data.experiment_type,
-      observations: data.observations,
-    };
+    console.log(authorId, members);
 
-    localStorage.setItem("experimentDetails", JSON.stringify(experiment));
+    console.log(
+      "FIRST NAME",
+      getDisplayNameById(authorId, members, "first_name")
+    );
 
-    navigate("/register-experiment-variables");
+    localStorage.setItem(
+      "experimentDetails",
+      JSON.stringify({
+        author: authorId,
+        author_name: getDisplayNameById(authorId, members, "name"),
+        experiment_type: experimentType,
+        laboratory: laboratoryId,
+        laboratory_name: getDisplayNameById(
+          laboratoryId,
+          laboratories,
+          "laboratory_name"
+        ),
+        microorganism: microorganismId,
+        observations,
+        product: productId,
+        substrate: substrateId,
+      })
+    );
+
+    navigate("/register-exp-variables");
   };
 
-  console.log(microorganisms);
-
-  if (microorganisms && products && substrates)
+  if (laboratories && members && microorganisms && products && substrates)
     return (
-      <Container fluid className={style.wrapper}>
-        <h1 className={style.title}>Register Experiment Details</h1>
-        <Form onSubmit={handleSubmit(onSubmit)} className={style.form}>
-          <Row className={style.row}>
-            <Col md={6}>
-              <Form.Group className={style.formGroup} controlId="author">
-                <Form.Label>Author</Form.Label>
-                <Form.Control
-                  {...register("author", {
-                    required: "Please introduce the author name",
-                  })}
-                  type="text"
-                  placeholder="Enter author name"
-                  autoComplete="off"
-                ></Form.Control>
-              </Form.Group>
+      <Container>
+        <RegisterExperimentSteps step1 />
+        <Row className="d-flex justify-content-center mt-3">
+          <h1>Register Experiment Details</h1>
+          {/* className = "mx-auto" */}
+          <Form onSubmit={handleSubmit}>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-4" controlId="authorId">
+                  <Form.Label>Author:</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="authorId"
+                    value={authorId}
+                    onChange={handleChangeExperimentField}
+                    required
+                  >
+                    <option value="">Select an Author</option>
+                    {members.map((member) => (
+                      <option key={member.id} value={member.id}>
+                        {member.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
 
-              <Form.Group className={style.formGroup} controlId="supervisor">
-                <Form.Label>Supervisor</Form.Label>
-                <Form.Control
-                  {...register("supervisor", {
-                    required: "Please introduce the supervisor name",
-                  })}
-                  type="text"
-                  placeholder="Enter supervisor name"
-                  autoComplete="off"
-                ></Form.Control>
-              </Form.Group>
+                <Form.Group className="mb-4" controlId="laboratoryId">
+                  <Form.Label>Laboratory:</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="laboratoryId"
+                    value={laboratoryId}
+                    onChange={handleChangeExperimentField}
+                    required
+                  >
+                    <option value="">Select a Laboratory</option>
+                    {laboratories.map((lab) => (
+                      <option key={lab.id} value={lab.id}>
+                        {lab.laboratory_name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
 
-              <Form.Group className={style.formGroup} controlId="laboratory">
-                <Form.Label>Laboratory</Form.Label>
-                <Form.Control
-                  {...register("laboratory", {
-                    required: "Please introduce the laboratory name",
-                  })}
-                  type="text"
-                  placeholder="Enter laboratory name"
-                  autoComplete="off"
-                ></Form.Control>
-              </Form.Group>
-
-              <Form.Group className={style.formGroup} controlId="substrate">
-                <Form.Label>Sbustrate</Form.Label>
-                <Form.Control {...register("substrate")} as="select">
-                  {substrates.map((substrate) => (
-                    <option key={substrate.id} value={substrate.id}>
-                      {substrate.name}
+                <Form.Group className="mb-4" controlId="experimentType">
+                  <Form.Label>Experiment Type:</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="experimentType"
+                    value={experimentType}
+                    onChange={handleChangeExperimentField}
+                    required
+                  >
+                    <option value="">Select an Experiment Type</option>
+                    <option value="kinetic">Kinetic growth</option>
+                    <option value="process optimization">
+                      Fermentation data
                     </option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
-            </Col>
+                  </Form.Control>
+                </Form.Group>
 
-            <Col md={6}>
-              <Form.Group className={style.formGroup} controlId="microorganism">
-                <Form.Label>Microorganism</Form.Label>
-                <Form.Control {...register("microorganism")} as="select">
-                  {microorganisms.map((mo) => (
-                    <option key={mo.id} value={mo.id}>
-                      {mo.name}
-                    </option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
+                <Form.Group className="mb-4" controlId="observations">
+                  <Form.Label>Observations (Optional)</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="observations"
+                    value={observations}
+                    onChange={handleChangeExperimentField}
+                    autoComplete="off"
+                  ></Form.Control>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-4" controlId="microorganism">
+                  <Form.Label>Microorganism:</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="microorganismId"
+                    value={microorganismId}
+                    onChange={handleChangeExperimentField}
+                    required
+                  >
+                    <option value="">Select a Microorganism</option>
+                    {microorganisms.map((mo) => (
+                      <option key={mo.id} value={mo.id}>
+                        {mo.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
 
-              <Form.Group className={style.formGroup} controlId="product">
-                <Form.Label>Product</Form.Label>
-                <Form.Control {...register("product")} as="select">
-                  {products.map((prod) => (
-                    <option key={prod.id} value={prod.id}>
-                      {prod.name}
-                    </option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
+                <Form.Group className="mb-4" controlId="substrate">
+                  <Form.Label>Substrate:</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="substrateId"
+                    value={substrateId}
+                    onChange={handleChangeExperimentField}
+                    required
+                  >
+                    <option value="">Select a Substrate</option>
+                    {substrates.map((substrate) => (
+                      <option key={substrate.id} value={substrate.id}>
+                        {substrate.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
 
-              <Form.Group className={style.formGroup} controlId="type">
-                <Form.Label>Experiment Type</Form.Label>
-                <Form.Control {...register("experiment_type")} as="select">
-                  <option value="kinetic">Kinetic growth</option>
-                  <option value="process optimization">
-                    Operation parameters optimization
-                  </option>
-                </Form.Control>
-              </Form.Group>
+                <Form.Group className="mb-4" controlId="productId">
+                  <Form.Label>Product</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="productId"
+                    value={productId}
+                    onChange={handleChangeExperimentField}
+                    required
+                  >
+                    <option value="">Select a Product</option>
+                    {products.map((prod) => (
+                      <option key={prod.id} value={prod.id}>
+                        {prod.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
 
-              <Form.Group className={style.formGroup} controlId="observations">
-                <Form.Label>Observations (Optional)</Form.Label>
-                <Form.Control
-                  {...register("observations")}
-                  type="text"
-                  placeholder="Enter experiment observations"
-                  autoComplete="off"
-                ></Form.Control>
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Row className={style.row}>
-            <button className={style.btnPrimary}>
-              Register Experiment Variables
-            </button>
-          </Row>
-        </Form>
+                <Button type="submit" className="mt-4">
+                  Register Experiment Details
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Row>
       </Container>
     );
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -44,19 +44,20 @@ const Login = () => {
   };
 
   useEffect(() => {
+    let toastId;
     if (loading) {
-      toast.loading("Login user ...");
+      toastId = toast.loading("Login user ...");
     }
 
     if (token) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       toast.success("Login successfully");
 
       navigate("/");
     }
 
     if (error) {
-      toast.remove();
+      toast.dismiss(toastId);
       toast.error(error);
     }
   }, [navigate, token, error, loading]);
@@ -69,8 +70,11 @@ const Login = () => {
 
   return (
     <Container>
-      <Row>
-        <Col md={6}>
+      <Row
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "70vh" }}
+      >
+        <Col md={4}>
           <Form onSubmit={handleSubmit}>
             <Form.Group>
               <Form.Label>Username:</Form.Label>
@@ -92,7 +96,9 @@ const Login = () => {
               />
             </Form.Group>
 
-            <button type="submit">Login</button>
+            <Button type="submit" className="mt-3">
+              Login
+            </Button>
           </Form>
         </Col>
       </Row>

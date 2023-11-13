@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { getCurrentFormattedDate } from "../utilis/general";
 
 export const useExperimentListFilter = () => {
   const [filters, setFilters] = useState({
-    filterBy: 0,
+    filterBy: "author",
     search: "",
-    sortBy: 0,
+    sortBy: "author",
     initialDate: "",
-    finalDate: "",
+    finalDate: getCurrentFormattedDate(),
   });
 
   const setFilterBy = (newFilterBy) =>

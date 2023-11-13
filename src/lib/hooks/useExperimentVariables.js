@@ -61,5 +61,25 @@ export const useExperimentVariables = () => {
     reader.readAsText(file);
   };
 
-  return { ...experimentVariables, handleFileChange };
+  const renameVariable = (oldVarName, newVarName) => {
+    setExperimentVariables((prevState) => {
+      // Update the variableNames array
+      const newVariableNames = prevState.variableNames.map((varName) =>
+        varName === oldVarName ? newVarName : varName
+      );
+
+      // Create a new variableValues object with the new key
+      const newVariableValues = { ...prevState.variableValues };
+      newVariableValues[newVarName] = newVariableValues[oldVarName];
+      delete newVariableValues[oldVarName]; // Remove the old key
+
+      return {
+        ...prevState,
+        variableNames: newVariableNames,
+        variableValues: newVariableValues,
+      };
+    });
+  };
+
+  return { ...experimentVariables, handleFileChange, renameVariable };
 };

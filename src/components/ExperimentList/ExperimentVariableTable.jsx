@@ -7,7 +7,6 @@ function ExperimentVariableTable({ variables }) {
         <tr>
           <th>Variable Name</th>
           <th>Variable Units</th>
-          <th>Detection Method</th>
         </tr>
       </thead>
       <tbody>
@@ -15,7 +14,6 @@ function ExperimentVariableTable({ variables }) {
           <tr key={index}>
             <td>{variable.variable_name}</td>
             <td>{variable.variable_units}</td>
-            <td>{variable.detection_method}</td>
           </tr>
         ))}
       </tbody>

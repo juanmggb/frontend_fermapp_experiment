@@ -12,19 +12,56 @@ import { loginReducer } from "./lib/reducers/sessionReducers";
 
 import {
   userListReducer,
-  registerUserReducer,
+  userUpdateReducer,
+  userRegisterReducer,
+  userDeleteReducer,
+
+  // Member
+  memberListReducer,
+  memberDetailsReducer,
+  memberUpdateReducer,
+
+  // Director
+  directorListReducer,
 } from "./lib/reducers/userReducers";
 
 import {
   experimentListReducer,
-  registerExperimentReducer,
+  experimentRegisterReducer,
+  experimentDetailsReducer,
+  experimentDeleteReducer,
+  experimentUpdateReducer,
 } from "./lib/reducers/experimentReducers";
 
 import {
+  // Microorganism
   microorganismListReducer,
+  microorganismDetailsReducer,
+  microorganismUpdateReducer,
+  microorganismRegisterReducer,
+  microorganismDeleteReducer,
+  // Substrate
   substrateListReducer,
+  substrateDetailsReducer,
+  substrateUpdateReducer,
+  substrateRegisterReducer,
+  substrateDeleteReducer,
+
+  // Product
   productListReducer,
+  productDetailsReducer,
+  productUpdateReducer,
+  productRegisterReducer,
+  productDeleteReducer,
 } from "./lib/reducers/elementReducers";
+
+import {
+  laboratoryListReducer,
+  laboratoryDetailsReducer,
+  laboratoryRegisterReducer,
+  laboratoryUpdateReducer,
+  laboratoryDeleteReducer,
+} from "./lib/reducers/laboratoryReducers";
 
 const rootReducer = combineReducers({
   // Session
@@ -32,22 +69,62 @@ const rootReducer = combineReducers({
 
   // Users
   userList: userListReducer,
-  registerUser: registerUserReducer,
+  userUpdate: userUpdateReducer,
+
+  userRegister: userRegisterReducer,
+  userDelete: userDeleteReducer,
+
+  // Members
+  memberList: memberListReducer,
+  memberDetails: memberDetailsReducer,
+  memberUpdate: memberUpdateReducer,
+
+  // Director
+  directorList: directorListReducer,
   // Experiment
   experimentList: experimentListReducer,
-  registerExperiment: registerExperimentReducer,
+  experimentDetails: experimentDetailsReducer,
+  experimentRegister: experimentRegisterReducer,
+  experimentDelete: experimentDeleteReducer,
+  experimentUpdate: experimentUpdateReducer,
 
-  // Elements
+  // Microorganism
   microorganismList: microorganismListReducer,
+  microorganismDetails: microorganismDetailsReducer,
+  microorganismUpdate: microorganismUpdateReducer,
+  microorganismRegister: microorganismRegisterReducer,
+  microorganismDelete: microorganismDeleteReducer,
+
+  // Substrate
   substrateList: substrateListReducer,
+  substrateDetails: substrateDetailsReducer,
+  substrateUpdate: substrateUpdateReducer,
+  substrateRegister: substrateRegisterReducer,
+  substrateDelete: substrateDeleteReducer,
+
+  // Product
   productList: productListReducer,
+  productDetails: productDetailsReducer,
+  productUpdate: productUpdateReducer,
+  productRegister: productRegisterReducer,
+  productDelete: productDeleteReducer,
+
+  // Laboratories
+  laboratoryList: laboratoryListReducer,
+  laboratoryDetails: laboratoryDetailsReducer,
+  laboratoryRegister: laboratoryRegisterReducer,
+  laboratoryUpdate: laboratoryUpdateReducer,
+  laboratoryDelete: laboratoryDeleteReducer,
 });
 
 const token = localStorage.getItem("token" || null);
 
+const memberId = localStorage.getItem("memberId" || null);
+
 const initialState = {
   userLogin: {
     token,
+    memberId,
   },
 };
 

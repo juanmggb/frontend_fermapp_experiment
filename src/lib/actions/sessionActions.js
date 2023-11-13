@@ -13,8 +13,12 @@ export const login = (credentials) => async (dispatch) => {
 
     dispatch({ type: LOGIN_SUCCESS, payload: data.access });
 
+    console.log(data);
+
     localStorage.setItem("token", JSON.stringify(data.access));
     localStorage.setItem("refresh", JSON.stringify(data.refresh));
+    localStorage.setItem("memberId", JSON.stringify(data.memberId));
+    localStorage.setItem("username", JSON.stringify(data.username));
   } catch (error) {
     dispatch({
       type: LOGIN_FAIL,
@@ -24,4 +28,10 @@ export const login = (credentials) => async (dispatch) => {
           : error.message,
     });
   }
+};
+
+export const logout = () => {
+  localStorage.clear();
+
+  window.location = "/login";
 };

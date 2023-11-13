@@ -22,7 +22,7 @@ export const getExperimentalVariables = (
       variable_name: variableName,
       variable_units: variableUnits,
       detection_method: detectionMethod,
-      values: variableValues[variableName],
+      values: variableValues[variableName], // when I hange the variableName then I can't access the values. So I will need to change the variableName key in the VariableValues object when I change the variableName
     };
 
     values.push(obj);
