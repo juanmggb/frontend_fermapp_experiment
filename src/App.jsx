@@ -24,6 +24,9 @@ import RegisterSubstrate from "./pages/RegisterSubstrate";
 import RegisterProduct from "./pages/RegisterProduct";
 import MemberDetails from "./pages/MemberDetails";
 import Account from "./pages/Account";
+import Simulation from "./pages/Simulation";
+import ParamterEstimation from "./pages/ParameterEstimation";
+import LinearRegression from "./pages/LinearRegression";
 
 function App() {
   const userLogin = useSelector((state) => state.userLogin);
@@ -46,12 +49,10 @@ function App() {
             {/* Experiments */}
             <Route path="/experiment-list" element={<ExperimentList />} />
             <Route path="/experiments/:id" element={<ExperimentDetails />} />
-
             <Route
               path="/register-exp-details"
               element={<RegisterExperimentDetails />}
             />
-
             <Route
               path="/register-exp-variables"
               element={<RegisterExperimentVariables />}
@@ -77,10 +78,10 @@ function App() {
             />
 
             {/* Substrate */}
-
             <Route path="/substrate-list" element={<SubstrateList />} />
             <Route path="/substrates/:id" element={<SubstrateDetails />} />
             <Route path="/register-substrate" element={<RegisterSubstrate />} />
+
             {/* Product */}
             <Route path="/product-list" element={<ProductList />} />
             <Route path="/products/:id" element={<ProductDetails />} />
@@ -89,8 +90,17 @@ function App() {
             {/* Members */}
             <Route path="/member-list" element={<MemberList />} />
             <Route path="/members/:id" element={<MemberDetails />} />
-
             <Route path="/register-member" element={<RegisterMember />} />
+
+            {/* ///////////////////  Analysis  ////////////////////////////////// */}
+
+            <Route path="/simulation" element={<Simulation />} />
+            <Route
+              path="/parameter-estimation"
+              element={<ParamterEstimation />}
+            />
+
+            <Route path="/linear-regression" element={<LinearRegression />} />
           </>
         )}
       </Routes>

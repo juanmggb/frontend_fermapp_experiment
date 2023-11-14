@@ -63,6 +63,14 @@ import {
   laboratoryDeleteReducer,
 } from "./lib/reducers/laboratoryReducers";
 
+// //////////////////// Analysis imports //////////////////////////////////
+import { simulationDataReducer } from "./lib/reducers/simulationReducers";
+
+import {
+  parameterOptimizationReducer,
+  linearRegressionReducer,
+} from "./lib/reducers/optimizationReducers";
+
 const rootReducer = combineReducers({
   // Session
   userLogin: loginReducer,
@@ -115,6 +123,13 @@ const rootReducer = combineReducers({
   laboratoryRegister: laboratoryRegisterReducer,
   laboratoryUpdate: laboratoryUpdateReducer,
   laboratoryDelete: laboratoryDeleteReducer,
+
+  // Simulation
+  simulationData: simulationDataReducer,
+
+  // Optimization
+  parameterOptimization: parameterOptimizationReducer,
+  linearRegression: linearRegressionReducer,
 });
 
 const token = localStorage.getItem("token" || null);

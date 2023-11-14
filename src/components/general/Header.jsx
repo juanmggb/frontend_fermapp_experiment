@@ -70,6 +70,24 @@ function Header() {
                   </LinkContainer>
                 </NavDropdown>
 
+                <NavDropdown title="Analysis" id="basic-nav-dropdown">
+                  <LinkContainer to="/simulation">
+                    <NavDropdown.Item>Simulation</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Divider />
+                  <LinkContainer to="/parameter-estimation">
+                    <NavDropdown.Item>Parameter Estimation</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Divider />
+                  <LinkContainer to="/linear-regression">
+                    <NavDropdown.Item>Linear Regression</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Divider />
+                  <LinkContainer to="/analysis-list">
+                    <NavDropdown.Item>Analysis List</NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
+
                 <NavDropdown title="Members" id="basic-nav-dropdown">
                   <LinkContainer to="/member-list">
                     <NavDropdown.Item>Member List</NavDropdown.Item>
