@@ -104,7 +104,7 @@ function SidebarOptimization({ kineticData, setKineticData }) {
           <Form.Label>Choose a file</Form.Label>
           <Form.Control
             type="file"
-            onChange={(e) => handleFileChange(e, setKineticData)}
+            onChange={(e) => handleFileChange(e, setKineticData, dispatch)}
           />
         </Form.Group>
 

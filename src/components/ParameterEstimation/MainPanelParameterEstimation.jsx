@@ -14,7 +14,6 @@ const LAYOUT = {
 };
 
 function MainPanelParameterEstimation({ kineticData }) {
-  console.log("kineticData", kineticData);
   const parameterOptimization = useSelector(
     (state) => state.parameterOptimization
   );
@@ -87,6 +86,8 @@ const getPlotExperimentalData = (data) => {
 };
 
 const getCombinedPlotData = (kineticData, simulatedData) => {
+  console.log("kineticData", kineticData);
+  console.log(" simulatedData", simulatedData);
   const kineticPlotData = [
     {
       x: kineticData.t,
@@ -116,7 +117,7 @@ const getCombinedPlotData = (kineticData, simulatedData) => {
 
   const simulatedPlotData = [
     {
-      x: simulatedData.t,
+      x: simulatedData.time,
       y: simulatedData.x,
       type: "scatter",
       mode: "lines",
@@ -124,7 +125,7 @@ const getCombinedPlotData = (kineticData, simulatedData) => {
       line: { color: "blue", dash: "dot" },
     },
     {
-      x: simulatedData.t,
+      x: simulatedData.time,
       y: simulatedData.s,
       type: "scatter",
       mode: "lines",
@@ -132,7 +133,7 @@ const getCombinedPlotData = (kineticData, simulatedData) => {
       line: { color: "red", dash: "dot" },
     },
     {
-      x: simulatedData.t,
+      x: simulatedData.time,
       y: simulatedData.p,
       type: "scatter",
       mode: "lines",

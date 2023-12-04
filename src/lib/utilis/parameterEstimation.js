@@ -1,7 +1,8 @@
 import * as XLSX from "xlsx";
 import { KINETIC_PARAMTERS_OPTIMIZATION_SYMBOLS } from "../../constants/kineticParamConstants";
+import { RESET_OPT_PARMS } from "../../constants/optimizationConstants";
 
-export const handleFileChange = (e, setKineticData) => {
+export const handleFileChange = (e, setKineticData, dispatch) => {
   const file = e.target.files[0];
   const reader = new FileReader();
   reader.onload = (event) => {
@@ -23,6 +24,7 @@ export const handleFileChange = (e, setKineticData) => {
 
     console.log("kineticData", jsonData);
     localStorage.setItem("kineticData", JSON.stringify(jsonData));
+    dispatch({ type: RESET_OPT_PARMS });
   };
   reader.readAsBinaryString(file);
 };
