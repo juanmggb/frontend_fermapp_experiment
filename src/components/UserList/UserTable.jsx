@@ -1,37 +1,38 @@
 import Table from "react-bootstrap/Table";
-import MemberDetailsModal from "./MemberDetailsModal";
-import style from "./MemberTable.module.css";
-import { useMemberDetailsModal } from "../../lib/hooks/useUserDetailsModal";
+import UserDetailsModal from "./UserDetailsModal";
+import style from "./UserTable.module.css";
+import { useUserDetailsModal } from "../../lib/hooks/useUserDetailsModal";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteUser } from "../../lib/actions/userActions";
 import toast from "react-hot-toast";
 import DeleteObjectConfirm from "../general/DeleteObjectConfirm";
-import { MEMBER_DETAILS_RESET } from "../../constants/userConstants";
+import { USER_DETAIL_REQUEST } from "../../constants/userConstants";
 
-const MemberTable = ({ members }) => {
+const UserTable = ({ users }) => {
+  console.log(users);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
-    memberDetailsModal,
-    showMemberDetailsModal,
-    handleShowMemberDetailsModal,
-    handleHideMemberDetailsModal,
-  } = useMemberDetailsModal(members);
+    userDetailsModal,
+    showUserDetailsModal,
+    handleShowUserDetailsModal,
+    handleHideUserDetailsModal,
+  } = useUserDetailsModal(users);
 
   const handleMemberDetails = (memberId) => {
-    dispatch({ type: MEMBER_DETAILS_RESET });
-    navigate(`/members/${memberId}`);
+    dispatch({ type: USER_DETAIL_REQUEST });
+    navigate(`/users/${memberId}`);
   };
 
-  const handleUserDelete = (memberId, userId) => {
+  const handleUserDelete = (userId) => {
     toast.dismiss();
     toast(
       (t) => (
         <DeleteObjectConfirm
           t={t}
           onDelete={() => dispatch(deleteUser(userId))}
-          object={`member ${memberId}`}
+          object={`User ${userId}`}
         />
       ),
       {
@@ -55,27 +56,29 @@ const MemberTable = ({ members }) => {
           </tr>
         </thead>
         <tbody>
-          {members.map((member) => (
+          {users.map((user) => (
             <tr
-              key={member.id}
+              key={user.id}
               className={style.tableRow}
-              onClick={() => handleShowMemberDetailsModal(member.id)}
+              onClick={() => handleShowUserDetailsModal(user.id)}
             >
-              <td>{member.id}</td>
+              <td>{user.id}</td>
               <td>
                 <img
                   width="100px"
-                  src={`http://127.0.0.1:8000/${member.image}`}
-                  alt={member.first_name}
+                  src={`http://127.0.0.1:8000/${user.image}`}
+                  alt={user.name}
                 />
               </td>
-              <td>{member.name}</td>
-              <td>{member.laboratory_name}</td>
-              <td>{member.role}</td>
+              <td>{user.name}</td>
+              <td>
+                {user.laboratory_name ? user.laboratory_name : "Not available"}
+              </td>
+              <td>{user.role}</td>
               <td
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleMemberDetails(member.id);
+                  handleMemberDetails(user.id);
                 }}
               >
                 <i className="fa-solid fa-pen-to-square"></i>
@@ -83,7 +86,7 @@ const MemberTable = ({ members }) => {
               <td
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleUserDelete(member.id, member.user);
+                  handleUserDelete(user.id, user.user);
                 }}
               >
                 <i className="fa-solid fa-trash"></i>
@@ -92,12 +95,12 @@ const MemberTable = ({ members }) => {
           ))}
         </tbody>
       </Table>
-      {showMemberDetailsModal && (
+      {showUserDetailsModal && (
         <div>
-          <MemberDetailsModal
-            member={memberDetailsModal}
-            show={showMemberDetailsModal}
-            handleClose={handleHideMemberDetailsModal}
+          <UserDetailsModal
+            user={userDetailsModal}
+            show={showUserDetailsModal}
+            handleClose={handleHideUserDetailsModal}
           />
         </div>
       )}
@@ -105,4 +108,4 @@ const MemberTable = ({ members }) => {
   );
 };
 
-export default MemberTable;
+export default UserTable;

@@ -5,7 +5,7 @@ export const useExperimentListFilter = () => {
   const [filters, setFilters] = useState({
     filterBy: "author",
     search: "",
-    sortBy: "author",
+    sortBy: "recent_first",
     initialDate: "",
     finalDate: getCurrentFormattedDate(),
   });

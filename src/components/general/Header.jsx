@@ -12,7 +12,7 @@ function Header() {
 
   const { token } = userLogin;
 
-  const username = JSON.parse(localStorage.getItem("username") || null);
+  const name = JSON.parse(localStorage.getItem("name") || null);
 
   return (
     <Navbar bg="light" expand="lg">
@@ -83,17 +83,19 @@ function Header() {
                     <NavDropdown.Item>Linear Regression</NavDropdown.Item>
                   </LinkContainer>
                   <NavDropdown.Divider />
+
+                  <NavDropdown.Divider />
                   <LinkContainer to="/analysis-list">
                     <NavDropdown.Item>Analysis List</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
 
-                <NavDropdown title="Members" id="basic-nav-dropdown">
-                  <LinkContainer to="/member-list">
-                    <NavDropdown.Item>Member List</NavDropdown.Item>
+                <NavDropdown title="Users" id="basic-nav-dropdown">
+                  <LinkContainer to="/user-list">
+                    <NavDropdown.Item>User List</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/register-member">
-                    <NavDropdown.Item>Register member</NavDropdown.Item>
+                  <LinkContainer to="/register-user">
+                    <NavDropdown.Item>Register user</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
               </>
@@ -106,7 +108,7 @@ function Header() {
               <NavDropdown title="Account" id="basic-nav-dropdown">
                 <LinkContainer to="/account">
                   <Nav.Link>
-                    <FaUser /> {username}
+                    <FaUser /> {name}
                   </Nav.Link>
                 </LinkContainer>
 

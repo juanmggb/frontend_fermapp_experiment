@@ -11,18 +11,16 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { loginReducer } from "./lib/reducers/sessionReducers";
 
 import {
+  accountDetailReducer,
+  accountUpdateReducer,
+} from "./lib/reducers/accountReducer";
+
+import {
   userListReducer,
+  userDetailsReducer,
   userUpdateReducer,
   userRegisterReducer,
   userDeleteReducer,
-
-  // Member
-  memberListReducer,
-  memberDetailsReducer,
-  memberUpdateReducer,
-
-  // Director
-  directorListReducer,
 } from "./lib/reducers/userReducers";
 
 import {
@@ -75,20 +73,18 @@ const rootReducer = combineReducers({
   // Session
   userLogin: loginReducer,
 
+  // Account
+  accountDetail: accountDetailReducer,
+  accountUpdate: accountUpdateReducer,
+
   // Users
   userList: userListReducer,
+  userDetails: userDetailsReducer,
   userUpdate: userUpdateReducer,
 
   userRegister: userRegisterReducer,
   userDelete: userDeleteReducer,
 
-  // Members
-  memberList: memberListReducer,
-  memberDetails: memberDetailsReducer,
-  memberUpdate: memberUpdateReducer,
-
-  // Director
-  directorList: directorListReducer,
   // Experiment
   experimentList: experimentListReducer,
   experimentDetails: experimentDetailsReducer,

@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
-import style from "./RegisterMember.module.css";
+import style from "./RegisterUser.module.css";
 import {
-  useUsernameUserForm,
-  validateUsername,
+  useEmailUserForm,
+  validateEmail,
 } from "../lib/hooks/useRegisterUserForm";
 import { useDispatch, useSelector } from "react-redux";
 import { postUser } from "../lib/actions/userActions";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { REGISTER_USER_RESET } from "../constants/userConstants";
+import { USER_REGISTER_RESET } from "../constants/userConstants";
 import { fetchLaboratoryList } from "../lib/actions/laboratoryActions";
 import { useForm } from "react-hook-form";
 
@@ -25,8 +25,7 @@ const RegisterUser = () => {
 
   const { laboratories } = laboratoryList;
 
-  const { username, setUsernameValue, setUsernameError } =
-    useUsernameUserForm();
+  const { email, setEmailValue, setEmailError } = useEmailUserForm();
 
   const {
     register,
@@ -52,8 +51,8 @@ const RegisterUser = () => {
     if (success) {
       toast.dismiss(toastId); // Dismiss the loading toast if registration succeeds
       toast.success("User registered successfully");
-      dispatch({ type: REGISTER_USER_RESET });
-      navigate("/member-list");
+      dispatch({ type: USER_REGISTER_RESET });
+      navigate("/user-list");
     }
   }, [loading, error, success, dispatch, navigate]);
 
@@ -86,10 +85,10 @@ const RegisterUser = () => {
   }, [errors.password, errors.confirmPassword, errors.name, errors.role]);
 
   useEffect(() => {
-    if (username.loading) {
-      validateUsername(username.value, setUsernameError);
+    if (email.loading) {
+      validateEmail(email.value, setEmailError);
     }
-  }, [username.value, username.loading]);
+  }, [email.value, email.loading]);
 
   const onSubmit = (data) => {
     toast.dismiss();
@@ -101,9 +100,9 @@ const RegisterUser = () => {
 
     const formData = new FormData();
 
-    formData.append("username", username.value);
+    formData.append("email", email.value);
     formData.append("password", data.password);
-    formData.append("first_name", data.first_name);
+    formData.append("name", data.name);
 
     if (data.laboratoryId) {
       formData.append("laboratoryId", data.laboratoryId);
@@ -130,22 +129,22 @@ const RegisterUser = () => {
             <h1>Register Member</h1>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group className="mb-3">
-                <Form.Label>Username:</Form.Label>
+                <Form.Label>Email:</Form.Label>
                 <Form.Control
-                  className={username.error ? style.usernameError : ""}
+                  className={email.error ? style.usernameError : ""}
                   type="text"
-                  value={username.value}
-                  onChange={(e) => setUsernameValue(e.target.value)}
+                  value={email.value}
+                  onChange={(e) => setEmailValue(e.target.value)}
                   required
                   // {...register("username", {
                   //   required: "Please, introduce the username",
                   // })}
                 />
-                {username.error && (
-                  <span className={style.error}>{username.error}</span>
+                {email.error && (
+                  <span className={style.error}>{email.error}</span>
                 )}
 
-                {username.loading && (
+                {email.loading && (
                   <span className={style.loading}>Loading...</span>
                 )}
               </Form.Group>
@@ -174,7 +173,7 @@ const RegisterUser = () => {
                 <Form.Label>Name:</Form.Label>
                 <Form.Control
                   type="text"
-                  {...register("first_name", {
+                  {...register("name", {
                     required: "Please, introduce the name",
                   })}
                 />

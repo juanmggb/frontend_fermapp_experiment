@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMemberDetails, updateUser } from "../lib/actions/userActions";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -8,29 +7,32 @@ import Loader from "../components/general/Loader";
 import Message from "../components/general/Message";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import {
-  useUsernameUserForm,
-  validateUsername,
+  useEmailUserForm,
+  validateEmail,
 } from "../lib/hooks/useRegisterUserForm";
 import { fetchLaboratoryList } from "../lib/actions/laboratoryActions";
 import style from "./Account.module.css";
 import { getDisplayNameById } from "../lib/utilis/general";
-import { USER_UPDATE_RESET } from "../constants/userConstants";
+import {
+  fetchAccountDetails,
+  updateAccount,
+} from "../lib/actions/accountActions";
+import { ACCOUNT_UPDATE_RESET } from "../constants/accountContants";
 
 const Account = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const userUpdate = useSelector((state) => state.userUpdate);
-  const { updateError, success, updateLoading } = userUpdate;
+  const accountUpdate = useSelector((state) => state.accountUpdate);
+  const { updateError, success, updateLoading } = accountUpdate;
 
-  const memberDetails = useSelector((state) => state.memberDetails);
-  const { error, member, loading } = memberDetails;
+  const accountDetail = useSelector((state) => state.accountDetail);
+  const { error, account, loading } = accountDetail;
 
   const laboratoryList = useSelector((state) => state.laboratoryList);
   const { laboratories } = laboratoryList;
 
-  const { username, setUsernameValue, setUsernameError } =
-    useUsernameUserForm();
+  const { email, setEmailValue, setEmailError } = useEmailUserForm();
 
   const {
     register,
@@ -39,30 +41,30 @@ const Account = () => {
     setValue,
   } = useForm();
 
-  const memberId = JSON.parse(localStorage.getItem("memberId") || null);
-
   // Dispatch action to dispatch data initially
   useEffect(() => {
     dispatch(fetchLaboratoryList());
   }, [dispatch]);
 
   useEffect(() => {
-    if (!member || Number(memberId) !== member.id) {
-      dispatch(fetchMemberDetails(memberId));
+    if (!account) {
+      dispatch(fetchAccountDetails());
     } else {
-      setUsernameValue(member.username);
-      setValue("name", member.name);
-      setValue("role", member.role);
-      setValue("laboratoryId", member.laboratory);
+      setEmailValue(account.email);
+      setValue("name", account.name);
+      setValue("role", account.role);
+      setValue("laboratoryId", account.laboratory);
     }
-  }, [member, memberId, dispatch, setValue]);
+  }, [account, dispatch, setValue]);
+
+  console.log(account);
 
   // Validate username
   useEffect(() => {
-    if (username.loading) {
-      validateUsername(username.value, setUsernameError, member.user);
+    if (email.loading) {
+      validateEmail(email.value, setEmailError, account.id);
     }
-  }, [username.value, username.loading]);
+  }, [email.value, email.loading]);
 
   // Validate form fields
   useEffect(() => {
@@ -103,8 +105,8 @@ const Account = () => {
     if (success) {
       toast.dismiss(toastId);
       toast.success("account updated successfully");
-      dispatch({ type: USER_UPDATE_RESET });
-      navigate("/member-list");
+      dispatch({ type: ACCOUNT_UPDATE_RESET });
+      navigate("/user-list");
     }
   }, [updateError, updateLoading, success, dispatch, navigate]);
 
@@ -122,11 +124,11 @@ const Account = () => {
       formData.append("password", data.password);
     }
 
-    formData.append("username", username.value);
+    formData.append("email", email.value);
     formData.append("name", data.name);
 
     if (data.laboratoryId) {
-      formData.append("laboratoryId", data.laboratoryId);
+      formData.append("laboratory", data.laboratoryId);
     }
 
     formData.append("role", data.role);
@@ -139,7 +141,7 @@ const Account = () => {
       console.log(entry[0], entry[1]);
     }
 
-    dispatch(updateUser(formData, member.user));
+    dispatch(updateAccount(formData));
   };
 
   if (loading) return <Loader />;
@@ -151,7 +153,7 @@ const Account = () => {
       </Message>
     );
 
-  if (member && laboratories)
+  if (account && laboratories)
     return (
       <Container>
         <Row className="d-flex justify-content-center mt-3">
@@ -160,19 +162,19 @@ const Account = () => {
             <Row>
               <Col sm={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Username:</Form.Label>
+                  <Form.Label>Email:</Form.Label>
                   <Form.Control
-                    className={username.error ? style.usernameError : ""}
+                    className={email.error ? style.usernameError : ""}
                     type="text"
-                    value={username.value}
-                    onChange={(e) => setUsernameValue(e.target.value)}
+                    value={email.value}
+                    onChange={(e) => setEmailValue(e.target.value)}
                     required
                   />
-                  {username.error && (
-                    <span className={style.error}>{username.error}</span>
+                  {email.error && (
+                    <span className={style.error}>{email.error}</span>
                   )}
 
-                  {username.loading && (
+                  {email.loading && (
                     <span className={style.loading}>Loading...</span>
                   )}
                 </Form.Group>

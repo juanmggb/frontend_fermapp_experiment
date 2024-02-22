@@ -8,10 +8,10 @@ import {
   fetchProductList,
   fetchSubstrateList,
 } from "../lib/actions/elementActions";
-import { fetchMemberList } from "../lib/actions/userActions";
 import { fetchLaboratoryList } from "../lib/actions/laboratoryActions";
 import RegisterExperimentSteps from "../components/general/RegisterExperimentSteps";
 import { getDisplayNameById } from "../lib/utilis/general";
+import { fetchUserList } from "../lib/actions/userActions";
 
 const RegisterExperimentDetails = () => {
   // Function to dispatch actions
@@ -32,8 +32,8 @@ const RegisterExperimentDetails = () => {
   const substrateList = useSelector((state) => state.substrateList);
   const { substrates } = substrateList;
 
-  const memberList = useSelector((state) => state.memberList);
-  const { members } = memberList;
+  const userList = useSelector((state) => state.userList);
+  const { users } = userList;
 
   const laboratoryList = useSelector((state) => state.laboratoryList);
   const { laboratories } = laboratoryList;
@@ -69,25 +69,25 @@ const RegisterExperimentDetails = () => {
     dispatch(fetchMicroorganismList());
     dispatch(fetchSubstrateList());
     dispatch(fetchProductList());
-    dispatch(fetchMemberList());
+    dispatch(fetchUserList());
     dispatch(fetchLaboratoryList());
   }, [dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(authorId, members);
+    console.log(authorId, users);
 
     console.log(
       "FIRST NAME",
-      getDisplayNameById(authorId, members, "first_name")
+      getDisplayNameById(authorId, users, "first_name")
     );
 
     localStorage.setItem(
       "experimentDetails",
       JSON.stringify({
         author: authorId,
-        author_name: getDisplayNameById(authorId, members, "name"),
+        author_name: getDisplayNameById(authorId, users, "name"),
         experiment_type: experimentType,
         laboratory: laboratoryId,
         laboratory_name: getDisplayNameById(
@@ -105,7 +105,9 @@ const RegisterExperimentDetails = () => {
     navigate("/register-exp-variables");
   };
 
-  if (laboratories && members && microorganisms && products && substrates)
+  console.log(users);
+
+  if (laboratories && users && microorganisms && products && substrates)
     return (
       <Container>
         <RegisterExperimentSteps step1 />
@@ -125,7 +127,7 @@ const RegisterExperimentDetails = () => {
                     required
                   >
                     <option value="">Select an Author</option>
-                    {members.map((member) => (
+                    {users.map((member) => (
                       <option key={member.id} value={member.id}>
                         {member.name}
                       </option>

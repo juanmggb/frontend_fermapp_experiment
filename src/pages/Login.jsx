@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../lib/actions/sessionActions";
-import { isValidPassword, isValidUsername } from "../lib/utilis/users";
+import { isValidPassword } from "../lib/utilis/users";
 
 const Login = () => {
   // Function to dispatch actions
@@ -14,22 +14,20 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [credentials, setCredentials] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, token, error } = userLogin;
 
-  const setUsername = (newUsername) => {
-    if (isValidUsername(newUsername) || !newUsername) {
-      setCredentials((prevCredentials) => ({
-        ...prevCredentials,
-        username: newUsername,
-      }));
-    } else {
-      toast.error("Invalid username. Only lowercase letters are allowed.");
-    }
+  const setEmail = (newEmail) => {
+    toast.dismiss();
+
+    setCredentials((prevCredentials) => ({
+      ...prevCredentials,
+      email: newEmail,
+    }));
   };
 
   const setPassword = (newPassword) => {
@@ -77,11 +75,11 @@ const Login = () => {
         <Col md={4}>
           <Form onSubmit={handleSubmit}>
             <Form.Group>
-              <Form.Label>Username:</Form.Label>
+              <Form.Label>Email:</Form.Label>
               <Form.Control
                 type="text"
-                value={credentials.username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={credentials.email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </Form.Group>

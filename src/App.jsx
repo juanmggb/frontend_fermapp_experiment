@@ -7,8 +7,8 @@ import ExperimentList from "./pages/ExperimentList";
 import Login from "./pages/Login";
 import { useSelector } from "react-redux";
 import Home from "./pages/Home";
-import MemberList from "./pages/MemberList";
-import RegisterMember from "./pages/RegisterMember";
+import UserList from "./pages/UserList";
+import RegisterUser from "./pages/RegisterUser";
 import LaboratoryList from "./pages/LaboratoryList";
 import LaboratoryDetails from "./pages/LaboratoryDetails";
 import RegisterLaboratory from "./pages/RegisterLaboratory";
@@ -22,7 +22,7 @@ import ProductDetails from "./pages/ProductDetails";
 import RegisterMicroorganism from "./pages/RegisterMicroorganism";
 import RegisterSubstrate from "./pages/RegisterSubstrate";
 import RegisterProduct from "./pages/RegisterProduct";
-import MemberDetails from "./pages/MemberDetails";
+import UserDetails from "./pages/UserDetails";
 import Account from "./pages/Account";
 import Simulation from "./pages/Simulation";
 import ParamterEstimation from "./pages/ParameterEstimation";
@@ -88,9 +88,9 @@ function App() {
             <Route path="/register-product" element={<RegisterProduct />} />
 
             {/* Members */}
-            <Route path="/member-list" element={<MemberList />} />
-            <Route path="/members/:id" element={<MemberDetails />} />
-            <Route path="/register-member" element={<RegisterMember />} />
+            <Route path="/user-list" element={<UserList />} />
+            <Route path="/users/:id" element={<UserDetails />} />
+            <Route path="/register-user" element={<RegisterUser />} />
 
             {/* ///////////////////  Analysis  ////////////////////////////////// */}
 

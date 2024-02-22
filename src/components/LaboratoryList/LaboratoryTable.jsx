@@ -44,6 +44,8 @@ const LaboratoryTable = ({ laboratories }) => {
     );
   };
 
+  console.log(laboratories);
+
   return (
     <>
       <Table striped bordered hover>

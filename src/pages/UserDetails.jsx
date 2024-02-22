@@ -3,24 +3,24 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchMemberDetails, updateMember } from "../lib/actions/userActions";
-import { MEMBER_UPDATE_RESET } from "../constants/userConstants";
 import Loader from "../components/general/Loader";
 import Message from "../components/general/Message";
-import style from "./MemberDetails.module.css";
+import style from "./UserDetails.module.css";
 import { useForm } from "react-hook-form";
+import { fetchUserDetails, updateUser } from "../lib/actions/userActions";
+import { USER_UPDATE_RESET } from "../constants/userConstants";
 
-const MemberDetails = () => {
+const UserDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
-  const memberId = params.id;
+  const userId = params.id;
 
-  const memberDetails = useSelector((state) => state.memberDetails);
-  const { error, member, loading } = memberDetails;
+  const userDetails = useSelector((state) => state.userDetails);
+  const { error, user, loading } = userDetails;
 
-  const memberUpdate = useSelector((state) => state.memberUpdate);
-  const { error: updateError, success, loading: updateLoading } = memberUpdate;
+  const userUpdate = useSelector((state) => state.userUpdate);
+  const { error: updateError, success, loading: updateLoading } = userUpdate;
 
   const {
     register,
@@ -30,30 +30,30 @@ const MemberDetails = () => {
   } = useForm();
 
   useEffect(() => {
-    if (!member || Number(memberId) !== member.id) {
-      dispatch(fetchMemberDetails(memberId));
+    if (!user || Number(userId) !== user.id) {
+      dispatch(fetchUserDetails(userId));
     } else {
-      setValue("role", member.role);
+      setValue("role", user.role);
     }
-  }, [member, memberId, dispatch, setValue]);
+  }, [user, userId, dispatch, setValue]);
 
   useEffect(() => {
     let toastId;
 
     if (updateLoading) {
-      toastId = toast.loading("Updating member");
+      toastId = toast.loading("Updating user");
     }
 
     if (updateError) {
       toast.dismiss(toastId);
-      toast.error("An error occurred when updating member");
+      toast.error("An error occurred when updating user");
     }
 
     if (success) {
       toast.dismiss(toastId);
-      toast.success("Member updated successfully");
-      dispatch({ type: MEMBER_UPDATE_RESET });
-      navigate("/member-list");
+      toast.success("User updated successfully");
+      dispatch({ type: USER_UPDATE_RESET });
+      navigate("/user-list");
     }
   }, [updateError, updateLoading, success, dispatch, navigate]);
 
@@ -65,7 +65,7 @@ const MemberDetails = () => {
   }, [errors.role]);
 
   const onSubmit = (data) => {
-    dispatch(updateMember(data, memberId));
+    dispatch(updateUser(data, userId));
   };
 
   if (loading) return <Loader />;
@@ -77,14 +77,14 @@ const MemberDetails = () => {
       </Message>
     );
 
-  if (member)
+  if (user)
     return (
       <Container>
         <Row
           className={`d-flex justify-content-center align-items-center ${style.row}`}
         >
           <Col sm={6}>
-            <h1>Member {memberId}</h1>
+            <h1>Member {userId}</h1>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group controlId="role">
                 <Form.Label>Role:</Form.Label>
@@ -107,4 +107,4 @@ const MemberDetails = () => {
       </Container>
     );
 };
-export default MemberDetails;
+export default UserDetails;

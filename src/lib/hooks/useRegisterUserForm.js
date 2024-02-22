@@ -1,66 +1,62 @@
 import { useState } from "react";
 import axios from "../axiosConfig";
 import _ from "lodash"; // Import lodash for debouncing
-import { isValidUsername } from "../utilis/users";
 import toast from "react-hot-toast";
 
-export const useUsernameUserForm = (userId = "") => {
-  const [username, setUsername] = useState({
+export const useEmailUserForm = () => {
+  const [email, setEmail] = useState({
     loading: false,
     error: "",
     value: "",
   });
 
-  const setUsernameValue = (newUsername) => {
-    // Validate username
+  const setEmailValue = (newEmail) => {
+    // Validate email
     toast.dismiss();
 
-    if (isValidUsername(newUsername) || !newUsername) {
-      // Dismiss any existing toasts
-      setUsername({
-        loading: true,
-        error: "",
-        value: newUsername,
-      });
-    } else {
-      toast.error("Invalid username. Only lowercase letters are allowed.");
-    }
+    // Dismiss any existing toasts
+    setEmail({
+      loading: true,
+      error: "",
+      value: newEmail,
+    });
   };
 
-  const setUsernameError = (errorMessage) => {
-    setUsername((prevUser) => ({
+  const setEmailError = (errorMessage) => {
+    setEmail((prevEmail) => ({
       loading: false,
       error: errorMessage,
-      value: prevUser.value,
+      value: prevEmail.value,
     }));
   };
 
   return {
-    username,
-    setUsernameValue,
-    setUsernameError,
+    email,
+    setEmailValue,
+    setEmailError,
   };
 };
 
 // Debounced function for username validation
-export const validateUsername = _.debounce(
-  async (usernameValue, setUsernameError, userId = "") => {
+export const validateEmail = _.debounce(
+  async (emailValue, setEmailError, userId = "") => {
     // Replace this with your actual API call
-    const errorMessage = await usernameExistsApi(usernameValue, userId);
+    const errorMessage = await emailExistsApi(emailValue, userId);
 
-    setUsernameError(errorMessage);
+    setEmailError(errorMessage);
   },
   500
 ); // 500ms debounce time
 
-// API to verify whether username already exists
-const usernameExistsApi = async (usernameValue, userId = "") => {
+// API to verify whether email already exists
+const emailExistsApi = async (emailValue, userId = "") => {
   try {
     const { data } = await axios.get(
-      `users/?username=${usernameValue}&userId=${userId}`
+      `username-validate/?email=${emailValue}&userId=${userId}`
     );
 
-    if (data.length > 0) return "Username already exist";
+    if (data.message === "User with given email already exists")
+      return "Email already exist";
   } catch (error) {
     return error.message;
   }

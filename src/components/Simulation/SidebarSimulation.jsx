@@ -122,12 +122,12 @@ const SidebarSimulation = () => {
 export default SidebarSimulation;
 
 const convertToCSV = (simulation) => {
-  const headers = ["Time(h)", "Biomass(g/L)", "Substrate(g/L)", "Product(g/L)"];
+  const headers = ["Time(h)", "Biomass(g/L)", "Product(g/L)", "Substrate(g/L)"];
   const rows = simulation.time.map((_, idx) => [
     simulation.time[idx],
     simulation.x[idx],
-    simulation.s[idx],
     simulation.p[idx],
+    simulation.s[idx],
   ]);
 
   const csvContent =

@@ -12,6 +12,8 @@ export const handleFileChange = (e, setKineticData, dispatch) => {
     const worksheet = workbook.Sheets[worksheetName];
     const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
     const jsonData = { t: [], x: [], s: [], p: [] };
+
+    console.log("DATA",data);
     data.slice(1).forEach((row) => {
       jsonData.t.push(row[0]);
       jsonData.x.push(row[1]);

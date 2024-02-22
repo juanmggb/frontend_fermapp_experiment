@@ -41,6 +41,7 @@ const ExperimentTable = ({ experiments }) => {
     );
   };
 
+  console.log(experiments);
   return (
     <div className={style.tableContainer}>
       <Table striped bordered hover>
@@ -62,7 +63,7 @@ const ExperimentTable = ({ experiments }) => {
               onClick={() => handleShowExperimentDetailsModal(exp.id)}
             >
               <td>{exp.id}</td>
-              <td>{exp.author_name}</td>
+              <td>{exp.author_name ? exp.author_name : "Not available"}</td>
               <td>{exp.laboratory_name}</td>
               <td>{exp.experiment_type}</td>
               <td

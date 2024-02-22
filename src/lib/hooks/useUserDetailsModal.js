@@ -1,26 +1,22 @@
 import { useState } from "react";
 
-export const useMemberDetailsModal = (members) => {
-  const [memberDetailsModal, setMemberDetailsModal] = useState({});
-  const [showMemberDetailsModal, setShowMemberDetailsModal] = useState(false);
+export const useUserDetailsModal = (users) => {
+  const [userDetailsModal, setUserDetailsModal] = useState({});
+  const [showUserDetailsModal, setShowUserDetailsModal] = useState(false);
 
-  const handleShowMemberDetailsModal = (memberId) => {
-    const memberDetailsModalSelected = members.find(
-      (member) => member.id === memberId
-    );
+  const handleShowUserDetailsModal = (userId) => {
+    const userDetailsModalSelected = users.find((user) => user.id === userId);
 
-    console.log(memberDetailsModalSelected);
-
-    setMemberDetailsModal(memberDetailsModalSelected);
-    setShowMemberDetailsModal(true);
+    setUserDetailsModal(userDetailsModalSelected);
+    setShowUserDetailsModal(true);
   };
 
-  const handleHideMemberDetailsModal = () => setShowMemberDetailsModal(false);
+  const handleHideUserDetailsModal = () => setShowUserDetailsModal(false);
 
   return {
-    memberDetailsModal,
-    showMemberDetailsModal,
-    handleShowMemberDetailsModal,
-    handleHideMemberDetailsModal,
+    userDetailsModal,
+    showUserDetailsModal,
+    handleShowUserDetailsModal,
+    handleHideUserDetailsModal,
   };
 };

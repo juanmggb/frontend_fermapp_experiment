@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDirectorList } from "../lib/actions/userActions";
+import { fetchUserList } from "../lib/actions/userActions";
 // import { postLaboratory } from "../lib/actions/laboratoryActions";
 import toast from "react-hot-toast";
 import { RESET_REGISTER_LABORATORY } from "../constants/laboratoryConstants";
@@ -10,14 +10,13 @@ import Loader from "../components/general/Loader";
 import Message from "../components/general/Message";
 import { useForm } from "react-hook-form";
 import { postLaboratory } from "../lib/actions/laboratoryActions";
-import { getDisplayNameById } from "../lib/utilis/general";
 
 const RegisterLaboratory = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const directorList = useSelector((state) => state.directorList);
-  const { loading, directors, error } = directorList;
+  const userList = useSelector((state) => state.userList);
+  const { loading, users, error } = userList;
 
   const laboratoryRegister = useSelector((state) => state.laboratoryRegister);
   const {
@@ -33,7 +32,7 @@ const RegisterLaboratory = () => {
   } = useForm();
 
   useEffect(() => {
-    dispatch(fetchDirectorList());
+    dispatch(fetchUserList());
   }, [dispatch]);
 
   useEffect(() => {
@@ -100,11 +99,6 @@ const RegisterLaboratory = () => {
     dispatch(
       postLaboratory({
         director: data.directorId,
-        director_name: getDisplayNameById(
-          data.directorId,
-          directors,
-          "first_name"
-        ),
         laboratory_name: data.laboratory_name,
         email: data.email,
         phone_number: data.phone_number,
@@ -113,6 +107,8 @@ const RegisterLaboratory = () => {
       })
     );
   };
+
+  console.log(users);
 
   if (loading) return <Loader />;
 
@@ -123,7 +119,7 @@ const RegisterLaboratory = () => {
       </Message>
     );
 
-  if (directors)
+  if (users)
     return (
       <Container>
         <Row className="d-flex justify-content-center">
@@ -142,9 +138,9 @@ const RegisterLaboratory = () => {
                   autoComplete="off"
                 >
                   <option value="">Select a Lab Director</option>
-                  {directors.map((director) => (
+                  {users.map((director) => (
                     <option key={director.id} value={director.id}>
-                      {director.first_name}
+                      {director.name}
                     </option>
                   ))}
                 </Form.Control>

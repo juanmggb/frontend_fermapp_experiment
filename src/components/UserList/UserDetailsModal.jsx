@@ -2,9 +2,9 @@ import { ListGroup } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-function MemberDetailsModal({ member, show, handleClose }) {
+function UserDetailsModal({ user, show, handleClose }) {
   // Destructure experiment properties for easy access
-  const { id, username, name, role, is_staff, laboratory_name } = member;
+  const { id, email, name, role, is_staff, laboratory_name } = user;
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -14,7 +14,7 @@ function MemberDetailsModal({ member, show, handleClose }) {
 
       <Modal.Body>
         <ListGroup>
-          <ListGroup.Item>Username: {username}</ListGroup.Item>
+          <ListGroup.Item>Email: {email}</ListGroup.Item>
           <ListGroup.Item>Name: {name}</ListGroup.Item>
           <ListGroup.Item>Role: {role}</ListGroup.Item>
 
@@ -34,4 +34,4 @@ function MemberDetailsModal({ member, show, handleClose }) {
   );
 }
 
-export default MemberDetailsModal;
+export default UserDetailsModal;

@@ -26,6 +26,8 @@ const ExperimentFilters = () => {
     navigate(url);
   };
 
+  console.log("sortBy",sortBy);
+
   return (
     <Form onSubmit={handleFilterExperiments}>
       <Form.Group className="mb-3" controlId="filterBy">
@@ -56,10 +58,10 @@ const ExperimentFilters = () => {
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
         >
+          <option value="recent_first">RECENT FIRST</option>
           <option value="author">AUTHOR</option>
           <option value="laboratory">LABORATORY</option>
           <option value="experiment_type">EXPERIMENT TYPE</option>
-          <option value="recent_first">RECENT FIRST</option>
           <option value="recent_last">RECENT LAST</option>
         </Form.Control>
       </Form.Group>
